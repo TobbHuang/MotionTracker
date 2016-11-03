@@ -5,6 +5,7 @@ import numpy as np
 
 __name__ = "__main__"
 
+
 font = cv2.FONT_HERSHEY_SIMPLEX
 targets = []
 
