@@ -50,13 +50,6 @@ class Target:
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         back_project = cv2.calcBackProject([hsv], [0], self.roi_hist, [0, 180], 1)
 
-        # CAMShift
-        # ret, self.track_window = cv2.CamShift(back_project, self.track_window, self.term_crit)
-        # pts = cv2.boxPoints(ret)
-        # pts = np.int0(pts)
-        # self.center = center(pts)
-        # cv2.polylines(show_frame, [pts], True, 255, 1)
-
         # meanShift
         ret, self.track_window = cv2.meanShift(back_project, self.track_window, self.term_crit)
         x, y, w, h = self.track_window
@@ -106,8 +99,8 @@ class Target:
 
 
 def main():
-    # camera = cv2.VideoCapture("/Users/huangtao/Documents/Github/pycv/chapter8/movie.mpg")
     camera = cv2.VideoCapture(0)
+    # I can't refer values through 'cv.XXX', so use Integer directly
     resolution = (camera.get(3), camera.get(4))
 
     history = 20
