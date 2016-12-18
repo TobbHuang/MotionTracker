@@ -20,11 +20,12 @@ def remove_target(target_item):
 
 
 def main():
-    camera = cv2.VideoCapture(0)
+    # camera = cv2.VideoCapture(0)
+    camera = cv2.VideoCapture("movie.mpg")
     # I can't refer values through 'cv.XXX', so use Integer directly
     resolution = (camera.get(3), camera.get(4))
 
-    history = 20
+    history = 0
 
     # KNN background subtractor
     bs = cv2.createBackgroundSubtractorKNN(detectShadows=True)
@@ -37,7 +38,7 @@ def main():
     while True:
         grabbed, frame = camera.read()
         if grabbed is False:
-            print "failed to grab frame."
+            print "failed to grab frame. " + str(frames)
             break
 
         fgmask = bs.apply(frame)

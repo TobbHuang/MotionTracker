@@ -46,7 +46,7 @@ class Target:
         latest_center = utils.cal_center([[x, y], [x + w, y], [x, y + h], [x + w, y + h]])
         # record the silent time, remove instance if exceed some number
         if (self.frame_num > 1 and abs(self.center[0] - latest_center[0]) + abs(
-                    self.center[1] - latest_center[1]) < 8):
+                    self.center[1] - latest_center[1]) < 2):
             self.silent_time += 1
         else:
             self.silent_time = 0
@@ -62,7 +62,7 @@ class Target:
         # kalman prediction result determines whether to delete
         if (self.frame_num > 3 and prediction_width < 10) or self.resolution[0] - prediction_width < 10 or (
                         self.frame_num > 3 and prediction_height < 10) or self.resolution[
-            1] - prediction_height < 10 or self.silent_time >= 15:
+            1] - prediction_height < 10 or self.silent_time >= 10:
             self.should_remove = True
 
     def remove_self(self):
