@@ -21,10 +21,12 @@ def remove_target(target_item):
 
 
 def main():
-    # camera = cv2.VideoCapture(0)
-    camera = cv2.VideoCapture("movie.mpg")
+    camera = cv2.VideoCapture(0)
+    # camera = cv2.VideoCapture("sample1.mp4")
+
     # I can't refer values through 'cv.XXX', so use Integer directly
-    resolution = (camera.get(3), camera.get(4))
+    resolution = ((int)(camera.get(3)), (int)(camera.get(4)))
+    # writer = cv2.VideoWriter('demo1.avi',  cv2.VideoWriter_fourcc(*'MJPG'), 10, resolution)
 
     print "目标窗口分辨率为 " + str(resolution)
     print "请输入ROI顶点坐标，输入0终止"
@@ -42,12 +44,12 @@ def main():
         # point[1] = int(point[1])
         # roi_points.append(point)
 
-    roi_points.append([250, 200])
-    roi_points.append([50, 200])
     roi_points.append([50, 50])
-    roi_points.append([250, 50])
+    roi_points.append([450, 50])
+    roi_points.append([450, 350])
+    roi_points.append([50, 350])
 
-    history = 0
+    history = 20
 
     # KNN background subtractor
     bs = cv2.createBackgroundSubtractorKNN(detectShadows=True)
@@ -83,7 +85,7 @@ def main():
                 is_new = True
                 for t in targets:
                     # 如果target已存在于数组中，则跳过
-                    if abs(cen[0] - t.center[0]) + abs(cen[1] - t.center[1]) < 150:
+                    if abs(cen[0] - t.center[0]) + abs(cen[1] - t.center[1]) < 100:
                         is_new = False
                         break
 
@@ -111,10 +113,12 @@ def main():
             cv2.line(frame, tuple(roi_points[i]), tuple(roi_points[j]), (255, 0, 0))
 
         cv2.imshow("移动目标监测", frame)
+        # writer.write(frame)
         if cv2.waitKey(110) & 0xff == 27:
             break
 
     camera.release()
+    # writer.release()
 
 
 if __name__ == "__main__":

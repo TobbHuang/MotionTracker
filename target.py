@@ -36,14 +36,6 @@ class Target:
         self.end_time = ""
         print "创建目标:", id, " 时间:", time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.start_time)), "位置:", track_window
 
-    def __del__(self):
-        duration_second = int(time.time() - self.start_time)
-        duration_minute = 0
-        if duration_second >= 60:
-            duration_minute = duration_second / 60
-            duration_second -= 60 * duration_minute
-        print "目标 ", self.id, " 离开跟踪区域，持续时间:", duration_minute, "m", duration_second, "s"
-
     def update(self, frame):
         self.frame_num += 1
 
@@ -56,7 +48,7 @@ class Target:
         latest_center = utils.cal_center([[x, y], [x + w, y], [x, y + h], [x + w, y + h]])
         # 记录silent time，如果达到某一阈值则视为跟踪结束
         if (self.frame_num > 1 and abs(self.center[0] - latest_center[0]) + abs(
-                    self.center[1] - latest_center[1]) < 2):
+                    self.center[1] - latest_center[1]) < 5):
             self.silent_time += 1
         else:
             self.silent_time = 0
@@ -76,4 +68,9 @@ class Target:
             self.should_remove = True
 
     def remove_self(self):
-        self.__del__()
+        duration_second = int(time.time() - self.start_time)
+        duration_minute = 0
+        if duration_second >= 60:
+            duration_minute = duration_second / 60
+            duration_second -= 60 * duration_minute
+        print "目标 ", self.id, " 离开跟踪区域，持续时间:", duration_minute, "m", duration_second, "s"
